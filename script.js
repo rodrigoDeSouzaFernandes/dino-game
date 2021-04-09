@@ -1,10 +1,32 @@
 const dino = document.querySelector('.dino');
 const background = document.querySelector('.background')
+const points = document.querySelector('.points')
 
 let isJumping = false
 let position = 0;
 
+let initialDifficulty = 30
+let spaceBetweenEnemies = 4000
+
+const pontos = 0000000
+points.innerHTML = pontos
+
 function start() {
+
+pointsInterval = setInterval(()=> {
+  newPoint = Number(points.innerHTML)
+  points.innerHTML = newPoint + 1
+}, 100)
+
+  dificultyInterval = setInterval(() => {
+    if (initialDifficulty > 10) {
+      initialDifficulty -= 1
+      spaceBetweenEnemies -= 200
+    } else {
+      clearInterval(initialDifficulty)
+    }
+  }, 10000)
+
   background.classList.add('start')
   const jump = () => {
 isJumping = true
@@ -32,7 +54,7 @@ let upInterval = setInterval(() => {
 function createCactus () {
 const cactus = document.createElement('div');
 let cactusPosition = 1000
-let randomTime = Math.random()*3000 + 500;
+let randomTime = Math.random()*spaceBetweenEnemies + 500;
 
 cactus.classList.add('cactus')
 cactus.style.left = cactusPosition + 'px'
@@ -49,16 +71,23 @@ leftInterval = setInterval(()=> {
     cactusPosition -= 10;
     cactus.style.left = cactusPosition + 'px';
   }
-}, 20);
+}, initialDifficulty);
 
-setTimeout(createCactus, randomTime)
+const randomEnemy = Math.random() * 7;
+
+  if (randomEnemy < 5) {
+    setTimeout(createCactus, randomTime)
+  } else {
+    setTimeout(createPterodactilo, randomTime)
+  }
 }
+
 
 function createPterodactilo() {
 
 const ptero = document.createElement('div');
 let pteroPosition = 1000
-let randomTime = Math.random()*10000 + 5000;
+let randomTime = Math.random()*spaceBetweenEnemies + 500;
 
 ptero.classList.add('ptero')
 ptero.style.left = pteroPosition + 'px'
@@ -75,13 +104,13 @@ leftInterval = setInterval(()=> {
     pteroPosition -= 10;
     ptero.style.left = pteroPosition + 'px';
   }
-}, 20);
+}, initialDifficulty);
 
-setTimeout(createPterodactilo, randomTime)
+setTimeout(createCactus, randomTime)
 }
 
+
 createCactus();
-setTimeout(() => {}, 10000)
 
 
 document.addEventListener('keydown', (event) => {
